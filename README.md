@@ -69,18 +69,7 @@ architecture-beta
 
 renders to 
 
-
-```mermaid
-architecture-beta
-    group api(logos:aws-lambda)[API]
-    service db(logos:aws-aurora)[Database] in api
-    service disk1(logos:aws-glacier)[Storage] in api
-    service disk2(logos:aws-s3)[Storage] in api
-    service server(logos:aws-ec2)[Server] in api
-    db:L -- R:server
-    disk1:T -- B:server
-    disk2:T -- B:db
-```
+<img width="446" height="462" alt="localhost_8765_ (1)" src="https://github.com/user-attachments/assets/cbae1537-2cf6-4fdc-aaf1-ea68f8ddaf67" />
 
 #### Fontawesome6-solid, Affinity, Tabler
 
@@ -96,10 +85,6 @@ flowchart
 
 renders to
 
-```mermaid
-flowchart
-    icon1@{icon: tabler:wall, label: firewall}
-    icon2@{icon: lucide:database, label: database}
-    icon3@{icon: affinity:office, label: office}
-    icon4@{icon: fa6-solid:user, label: user}
-```
+<img width="389" height="100" alt="localhost_8765_" src="https://github.com/user-attachments/assets/8c959fe1-dca5-4f05-befe-a8519459eb6b" />
+
+
