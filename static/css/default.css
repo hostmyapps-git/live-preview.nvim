@@ -1,0 +1,20 @@
+body { padding: 2rem; font-family: sans-serif; }
+#theMother { max-width: 100%; margin: auto; }
+#plantUmlControls { display: none; margin-bottom: 1rem; }
+.svg-download-btn {
+	display: inline-block;
+	margin-top: 0.3rem;
+	margin-bottom: 1rem;
+	padding: 0.2rem 0.5rem;
+	font-size: 0.9rem;
+	background: indigo;
+	color: ghostwhite;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.svg-download-btn:hover {
+	background: rebeccapurple;
+}

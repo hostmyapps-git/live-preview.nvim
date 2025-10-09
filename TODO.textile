@@ -1,0 +1,53 @@
+<notextile>
+<style>
+table.striped tr:nth-child(odd){background-color: lavender; color:black;}
+th{background-color: indigo; color:ivory; padding:0.5em;}
+table.striped :is(th,td){padding:0.5em;}
+table.striped{
+	border: solid indigo thin;
+	border-collapse: collapse;}
+</style>
+</notextile>
+
+h1. ToDo List
+
+h2. mindmap
+
+bc(mermaid). ---
+config:
+  htmlLabels: false
+---
+mindmap
+ToDos
+	bugs
+		socket connect funktioniert noch nicht zuverlässig
+		Connection offen lassen
+		notendigkeit von killall node
+	optimization
+		autoscroll
+			test domDiff
+	features
+		mermaid
+			icon sets
+			fontAwesome Integration
+		config Object
+			custom Stylesheets
+			custom libraries
+			disable autoscroll
+		edit config/settings in preview and save
+
+h2. Table
+
+|_. Issue |_. Category |_. priority |_. urgency |
+|Socket Connect funktioniert nicht zuverlässig | 🪲 | ⭐⭐⭐ | ⭐⭐⭐ |
+|Connection offen lassen| 🪲 | ⭐⭐⭐ | ⭐⭐⭐ |
+|Notwendigkeit von killall node| 🪲 | ⭐⭐⭐ | ⭐⭐⭐ |
+|autoscroll| ↗️ | ⭐⭐⭐ | ⭐⭐⭐ |
+|mermaid icon sets| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+|mermaid fontAwesome| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+|config Object: custom Stylesheets| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+|config Object: custom libraries| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+|config Object: toggle autoscroll| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+|edit config/settings in preview and save| 🤠| ⭐⭐⭐ | ⭐⭐⭐ |
+
+

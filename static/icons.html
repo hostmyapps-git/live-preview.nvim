@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Icon Preview</title>
+		<style>
+		body { font-family: sans-serif; padding: 1rem; }
+		h2 { margin-top: 2rem; }
+		.icon-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, 80px);
+			gap: 1rem;
+		}
+		.icon-box {
+			text-align: center;
+			font-size: 12px;
+		}
+		svg {
+			width: 48px;
+			height: 48px;
+			display: block;
+			margin: auto;
+			fill: currentColor;
+		}
+		.error {
+			color: red;
+		}
+		</style>
+		<script src="iconpacks/affinity.js"></script>
+		<script src="iconpacks/fa6-solid.js"></script>
+		<script src="iconpacks/logos.js"></script>
+		<script src="iconpacks/tabler.js"></script>
+		<script src="iconpacks/lucide.js"></script>
+		<script> const icons=[lucide,affinity,fa6solid,logos,tabler];</script>
+	</head>
+	<body>
+		<h1>🧩 Mermaid Icon Preview</h1>
+		<p>Zeigt alle Icons aus <code>*.json</code>-Dateien im <code>static/iconpacks/</code>-Verzeichnis.</p>
+		<div id="content">Lade Icons…</div>
+
+		<script>
+
+		const container = document.getElementById("content");
+		container.innerHTML = "";
+
+		icons.forEach((json,i) => {
+			const iconset = json.icons || json; // fallback if top-level is already flat
+
+			const section = document.createElement("section");
+			const header = document.createElement("h2");
+			header.textContent = `📦 ${json.prefix}`;
+			section.appendChild(header);
+
+			const grid = document.createElement("div");
+			grid.className = "icon-grid";
+
+			Object.entries(iconset).forEach(([name, icon]) => {
+				if (!icon.body) {
+					console.warn(`⚠️ Kein SVG-body für Icon "${name}" in Datei "${file}"`);
+					return;
+				}
+
+				const box = document.createElement("div");
+				box.className = "icon-box";
+
+				const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+				const width  =icon.width || json.width  || 24;
+				const height =icon.height || json.height || 24;
+				const left   =icon.left|| json.left   || 0;
+				const top    =icon.top|| json.top    || 0;
+
+				svg.setAttribute("viewBox", `${left} ${top} ${width} ${height}`);
+				svg.setAttribute("width", width);
+				svg.setAttribute("height", height);
+				svg.innerHTML = icon.body;
+
+				const label = document.createElement("div");
+				label.textContent = `${json.prefix}, ${name}, width: ${width}, height: ${height}, left: ${left}, top: ${top}`;
+
+				box.appendChild(svg);
+				box.appendChild(label);
+				grid.appendChild(box);
+			});
+
+			section.appendChild(grid);
+			container.appendChild(section);
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>LivePreview</title>
+
+		<!-- Libraries -->
+		<script src="libs/markdown-it.js/markdown-it.min.js"></script>
+		<script src="libs/textile.js/textile.js"></script>
+		<script src="libs/mermaid.js/mermaid.min.js"></script>
+		<script src="libs/katex/katex.min.js"></script>
+		<script src="libs/katex/auto-render.min.js"></script>
+		<script src="libs/katex/mhchem.min.js"></script>
+		<script src="libs/viz.js/viz-global.js"></script>
+		<script src="libs/plantuml-encoder/plantuml-encoder.min.js"></script>
+		<script src="libs/highlight.js/highlight.min.js"></script>
+
+		<link rel="stylesheet" href="libs/katex/katex.min.css" />
+		<link rel="stylesheet" href="libs/highlight.js/default.min.css" />
+		<!-- SVG grid CSS -->
+		<link rel="stylesheet" href="css/svggrid.css"/>
+		<link rel="stylesheet" href="css/default.css"/>
+
+	</head>
+	<body>
+		<svg style="display:none" aria-hidden="true" id="svgContainerForIcons">
+			<defs id="icon-defs"></defs>
+		</svg>
+		<h2>📝 Live Preview</h2>
+
+		<div id="plantUmlControls">
+			<label for="serverSelect">🌐 PlantUML Server:</label>
+			<select id="serverSelect">
+				<option value="https://www.plantuml.com/plantuml">plantuml.com</option>
+				<option value="http://localhost:8080" selected>localhost:8080</option>
+			</select>
+		</div>
+
+		<div id="theMother">Waiting for content…</div>
+
+		<script type="module" src="scripts/main.js"></script>
+	</body>
+</html>
