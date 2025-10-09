@@ -46,3 +46,60 @@ If not detected automatically set it with `:setfiletype markdown`, `:setfiletype
 * svg is supported by using ` ```svgimg`
 
 SVG based diagrams can be saved directly from the browser (including all styles, references from `<use>` elements, etc.). This is useful for `svgimg`, `mermaid`, `graphviz` and `plantuml`.
+
+### Mermaid
+
+Lucide, Fontawesome6-solid, Affinity and Tabler and Logos are included as default iconpacks. Custom iconpacks can be included in the config. 
+
+#### Logos
+
+````
+```mermaid
+architecture-beta
+    group api(logos:aws-lambda)[API]
+    service db(logos:aws-aurora)[Database] in api
+    service disk1(logos:aws-glacier)[Storage] in api
+    service disk2(logos:aws-s3)[Storage] in api
+    service server(logos:aws-ec2)[Server] in api
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db
+```
+````
+
+renders to 
+
+
+```mermaid
+architecture-beta
+    group api(logos:aws-lambda)[API]
+    service db(logos:aws-aurora)[Database] in api
+    service disk1(logos:aws-glacier)[Storage] in api
+    service disk2(logos:aws-s3)[Storage] in api
+    service server(logos:aws-ec2)[Server] in api
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db
+```
+
+#### Fontawesome6-solid, Affinity, Tabler
+
+````
+```mermaid
+flowchart
+    icon1@{icon: tabler:wall, label: firewall}
+    icon2@{icon: lucide:database, label: database}
+    icon3@{icon: affinity:office, label: office}
+    icon4@{icon: fa6-solid:user, label: user}
+```
+````
+
+renders to
+
+```mermaid
+flowchart
+    icon1@{icon: tabler:wall, label: firewall}
+    icon2@{icon: lucide:database, label: database}
+    icon3@{icon: affinity:office, label: office}
+    icon4@{icon: fa6-solid:user, label: user}
+```
