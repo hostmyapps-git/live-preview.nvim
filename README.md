@@ -67,10 +67,6 @@ architecture-beta
 ```
 ````
 
-renders to 
-
-<img width="446" height="462" alt="localhost_8765_ (1)" src="https://github.com/user-attachments/assets/cbae1537-2cf6-4fdc-aaf1-ea68f8ddaf67" />
-
 #### Fontawesome6-solid, Affinity, Tabler
 
 ````
@@ -82,9 +78,4 @@ flowchart
     icon4@{icon: fa6-solid:user, label: user}
 ```
 ````
-
-renders to
-
-<img width="389" height="100" alt="localhost_8765_" src="https://github.com/user-attachments/assets/8c959fe1-dca5-4f05-befe-a8519459eb6b" />
-
 
