@@ -28,6 +28,7 @@ async function loadIconPacks(cfg) {
 export async function handleMessage(data) {
 	try {
 		const cfg = data.config || {};
+		console.log(cfg);
 		bootstrapLibraries(cfg);
 		let html = "";
 		if (data.format === "markdown") {

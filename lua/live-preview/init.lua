@@ -86,25 +86,83 @@ local function readFile(path)
 	return content
 end
 
+local function isWithinServerPath(path)
+	local plugin_path = debug.getinfo(1, "S").source:sub(2):gsub("/init%.lua", "")
+	local static_root = vim.fn.resolve(plugin_path .. "/../../static/")
+	local resolved = vim.fn.resolve(vim.fn.expand(path))
+	return resolved:find(static_root, 1, true) == 1
+end
+
+local function resolvePath(path)
+	local expanded = vim.fn.expand(path)
+	if expanded:match("^/") then
+		return expanded
+	end
+	local plugin_path = debug.getinfo(1, "S").source:sub(2):gsub("/init%.lua", "")
+	return plugin_path .. "/../../static/" .. expanded
+end
+
 local function enrichConfig(cfg)
 	cfg = vim.deepcopy(cfg or {})
 	cfg._inlined_styles = {}
 	cfg._inlined_scripts = {}
-
+	cfg._inlined_iconsets = {}
+	-- Inline only styles outside server path
 	if cfg.stylesheets then
 		for _, item in ipairs(cfg.stylesheets) do
-			local content = readFile(item.path)
-			if content then
-				table.insert(cfg._inlined_styles, { name = item.name, content = content })
+			local resolved_path = resolvePath(item.path)
+			if not isWithinServerPath(resolved_path) then
+				local content = readFile(resolved_path)
+				if content then
+					table.insert(cfg._inlined_styles, { name = item.name, content = content })
+				else
+					print("[LuaMarkdownPreview] ⚠️ Stylesheet not found: " .. resolved_path)
+				end
 			end
 		end
 	end
+	-- Inline only libraries outside server path
 	if cfg.libraries then
 		for _, item in ipairs(cfg.libraries) do
-			local content = readFile(item.path)
-			if content then
-				table.insert(cfg._inlined_scripts, { name = item.name, content = content })
+			local resolved_path = resolvePath(item.path)
+			if not isWithinServerPath(resolved_path) then
+				local content = readFile(resolved_path)
+				if content then
+					table.insert(cfg._inlined_scripts, { name = item.name, content = content })
+				else
+					print("[LuaMarkdownPreview] ⚠️ Library not found: " .. resolved_path)
+				end
 			end
+		end
+	end
+	-- For iconsets: keep external ones inline, local ones remain as paths
+	for _, section in ipairs({ "mermaid", "svg" }) do
+		if cfg[section] and cfg[section].iconsets then
+			local filtered = {}
+			for _, pack in ipairs(cfg[section].iconsets) do
+				local resolved = resolvePath(pack.path)
+				if isWithinServerPath(resolved) then
+					-- local file: relative path (browser fetch)
+					local rel = resolved:match(".-/static/(.*)$")
+					pack.path = "/" .. rel
+					table.insert(filtered, pack)
+				else
+					-- external file: inline instead of path
+					local content = readFile(resolved)
+					if content then
+						table.insert(cfg._inlined_iconsets or {}, {
+							section = section,
+							name = pack.name,
+							content = content,
+						})
+						cfg._inlined_iconsets = cfg._inlined_iconsets
+					else
+						print("[LuaMarkdownPreview] ⚠️ External iconset not found: " .. resolved)
+					end
+					-- ⛔ skip adding pack to filtered (avoid duplicate)
+				end
+			end
+			cfg[section].iconsets = filtered
 		end
 	end
 	return cfg
