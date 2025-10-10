@@ -7,13 +7,54 @@ Live Preview is a neovim plugin, designed to generate realtime preview of markdo
 
 add the following to you setup function
 
-```
+```lua
 {"hostmyapps-git/live-preview.nvim",
-			build = "npm install --prefix .",
-			config = function()
-				require ("live-preview").setup()
-end,
+    build = "npm install --prefix .",
+    config = function()
+        require ("live-preview").setup()
+    end,
 },
+```
+
+## Configuration
+
+Insert the following to your nvim configuration
+
+```lua
+vim.g.live_preview_options = {
+    general = {
+        autoscroll = true,
+        width = "100%",
+    },
+    libraries = {},
+    stylesheets = {
+        { name = "stylesheet name", path="path to your stylesheet"},
+    },
+    mermaid = {
+        iconsets ={
+            { name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
+            { name = "logos",     path = "iconpacks/logos.json" },
+            { name = "tabler",    path = "iconpacks/tabler.json" },
+            { name = "lucide",    path = "iconpacks/lucide.json" },
+            { name = "affinity",  path = "iconpacks/affinity.json" },
+            -- { name = "your_icon_pack",  path = "path to your iconpack" },
+        },
+    },
+    plantuml = {
+        server = "localhost:8080",
+        imageFormat = "svg",
+    },
+    svg={
+        iconsets = { 
+            { name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
+            { name = "logos",     path = "iconpacks/logos.json" },
+            { name = "tabler",    path = "iconpacks/tabler.json" },
+            { name = "lucide",    path = "iconpacks/lucide.json" },
+            { name = "affinity",  path = "iconpacks/affinity.json" },
+            -- { name = "your_icon_pack",  path = "path to your iconpack" },
+        },
+    },
+}
 ```
 
 ## Commands
