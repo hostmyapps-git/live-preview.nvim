@@ -18,6 +18,8 @@ add the following to you setup function
 
 ## Configuration
 
+node and npm need to be installed.
+
 Insert the following to your nvim configuration
 
 ```lua
