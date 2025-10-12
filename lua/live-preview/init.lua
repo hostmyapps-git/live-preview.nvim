@@ -6,6 +6,33 @@ local isActive = false
 local previewUrl = "http://localhost:8765"
 local serverPid = nil
 local debugEnabled = false
+local logFile = vim.fn.stdpath("cache") .. "/live_preview.log"
+
+local function log(msg)
+	local f = io.open(logFile, "a")
+	if f then
+		f:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. tostring(msg) .. "\n")
+		f:close()
+	end
+end
+
+local function logTable(tbl, indent)
+	indent = indent or 0
+	local prefix = string.rep("  ", indent)
+	for k, v in pairs(tbl) do
+		if type(v) == "table" then
+			log(prefix .. tostring(k) .. " = {")
+			logTable(v, indent + 1)
+			log(prefix .. "}")
+		else
+			log(prefix .. tostring(k) .. " = " .. tostring(v))
+		end
+	end
+end
+
+local function dbg(msg)
+	if debugEnabled then log(msg) end
+end
 
 -- systemübergreifend Browser öffnen
 local function openBrowser()
@@ -34,28 +61,20 @@ local function startServer()
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_stdout = function(_, data)
-			if debugEnabled and data then
-				print("[Server stdout]:", table.concat(data, "\n"))
-			end
+			dbg("[Server stdout]:", table.concat(data, "\n"))
 		end,
 		on_stderr = function(_, data)
-			if debugEnabled and data then
-				print("[Server stderr]:", table.concat(data, "\n"))
-			end
+			dbg("[Server stderr]:", table.concat(data, "\n"))
 		end,
 	})
 	serverPid = pid
-	if debugEnabled then
-		print("[LivePreview] Server gestartet mit PID:", pid)
-	end
+	dbg("[LivePreview] Server gestartet mit PID:", pid)
 end
 
 local function stopServer()
 	if serverPid then
 		pcall(vim.fn.jobstop, serverPid)
-		if debugEnabled then
-			print("[LivePreview] Server gestoppt.")
-		end
+		dbg("[LivePreview] Server gestoppt.")
 		serverPid = nil
 	end
 end
@@ -201,16 +220,17 @@ end
 
 function M.send(bufnr)
 	local msg = buildMessage(bufnr)
-	if debugEnabled then
-		print("[LivePreview] Sending payload:\n" .. msg)
-	end
+	dbg("[LivePreview] Sending payload:\n" .. msg)
 	vim.fn.jobstart({ "curl", "-s", "-X", "POST", "--data", msg, previewUrl .. "/update" }, {
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_stderr = function(_, data)
-			if debugEnabled and data and #data > 0 then
-				print("[LivePreview ERROR]:", table.concat(data, "\n"))
+			if data and #data > 0 then
+				dbg("[LivePreview ERROR]:", table.concat(data, "\n"))
 			end
+		end,
+		on_exit = function(_, code, _)
+			dbg("[LivePreview EXIT]: curl exited with code " .. tostring(code))
 		end,
 	})
 end
@@ -257,7 +277,7 @@ function M.start()
 	if not M._exit_autocmd_registered then
 		vim.api.nvim_create_autocmd("VimLeave", {
 			callback = function()
-				if debugEnabled then print ("[LivePreview] VimLeave Triggered - stopServer") end
+				dbg ("[LivePreview] VimLeave Triggered - stopServer")
 				M.stop()
 			end,
 			desc = "[LivePreview] Stoppe Server bei VimLeave",
