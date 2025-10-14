@@ -122,3 +122,14 @@ flowchart
 ```
 ````
 
+## Trouble Shooting
+
+1. exit vim
+2. `killall node`
+3. open the trouble file in vim again
+4. run `:LivePreviewDebug on`.
+5. run `:LivePreview`
+6. check log files
+    - vim plugin log: .cache/nvim/live_preview.log.
+    - server.js log: server_error.log
+    - last_payload.json
