@@ -26,6 +26,7 @@ async function loadIconPacks(cfg) {
 }
 
 export async function handleMessage(data) {
+	console.log(data);
 	try {
 		const cfg = data.config || {};
 		console.log(cfg);

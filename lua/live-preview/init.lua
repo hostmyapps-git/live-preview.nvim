@@ -220,12 +220,27 @@ end
 
 function M.send(bufnr)
 	local msg = buildMessage(bufnr)
+	local size = #msg
+	dbg(string.format("[LivePreview] Payload size: %d bytes", size))
+	--utf-8 check
+	--if not vim.fn.eval('utf8_valid(' .. vim.fn.string(msg) .. ')') then
+	--	dbg("[LivePreview] ⚠️ invalid UTF-8-chars in Payload!")
+	--end
 	dbg("[LivePreview] Sending payload:\n" .. msg)
+	local ok, parsed = pcall(vim.fn.json_decode, msg)
+	if not ok then
+		dbg("[LivePreview] ⚠️ JSON decode failed — malformed payload!")
+	else
+		dbg(string.format("[LivePreview] ✅ JSON decode succeeded, keys: %s",
+			table.concat(vim.tbl_keys(parsed), ", ")
+		))
+	end
 	vim.fn.jobstart({ "curl", "-s", "-X", "POST", "--data", msg, previewUrl .. "/update" }, {
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_stderr = function(_, data)
 			if data and #data > 0 then
+				dbg("[LivePreview ERROR/raw data]:", data);
 				dbg("[LivePreview ERROR]:", table.concat(data, "\n"))
 			end
 		end,
