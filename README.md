@@ -28,7 +28,9 @@ vim.g.live_preview_options = {
         autoscroll = true,
         width = "100%",
     },
-    libraries = {},
+    libraries = {
+			-- { name = "your script",  path = "path to your script" },
+    },
     stylesheets = {
         { name = "stylesheet name", path="path to your stylesheet"},
     },
