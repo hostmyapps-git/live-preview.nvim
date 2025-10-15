@@ -96,7 +96,7 @@ SVG based diagrams can be saved directly from the browser (including all styles,
 ### Plantuml
 
 * use local plantuml server (`plantuml -picoweb`) as default.
-* use of online servers is supported in configuration object (e.g. `plantuml.com/plantuml/`)
+* use of online servers is supported in configuration object (e.g. `https://plantuml.com/plantuml`)
 
 ### Mermaid
 
