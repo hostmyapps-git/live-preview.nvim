@@ -86,6 +86,7 @@ If not detected automatically set it with `:setfiletype markdown`, `:setfiletype
 * Mermaid Diagrams are supportet by using ` ```mermaid`
 * Graphviz and dot is supported by using ` ```dot`
 * Plantuml is supported by using ` ```plantuml`
+* chart.js is supported by using ` ```chart`
 * Math is supported by katex by using ` ```katex`
 * Chemistry is supported by katex mhchm by using ` ```mhchem`
 * svg is supported by using ` ```svgimg`
@@ -144,6 +145,7 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 
 | Library                                                               | Version |
 |-----------------------------------------------------------------------|---------|
+| [chart.js](https://github.com/chartjs/Chart.js)                       | 4.5.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.11.1 |
 | [katex](https://github.com/KaTeX/KaTeX)                               | 0.16.25 |
 | [markdown-it](https://github.com/markdown-it/markdown-it)             | 14.1.0  |
