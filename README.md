@@ -93,6 +93,11 @@ If not detected automatically set it with `:setfiletype markdown`, `:setfiletype
 
 SVG based diagrams can be saved directly from the browser (including all styles, references from `<use>` elements, etc.). This is useful for `svgimg`, `mermaid`, `graphviz` and `plantuml`.
 
+### Plantuml
+
+* use local plantuml server (`plantuml -picoweb`) as default.
+* use of online servers is supported in configuration object (e.g. `plantuml.com/plantuml/`)
+
 ### Mermaid
 
 Lucide, Fontawesome6-solid, Affinity and Tabler and Logos are included as default iconpacks. Custom iconpacks can be included in the config. 
