@@ -15,7 +15,6 @@
 		<script src="libs/chart.js/chart.umd.min.js"></script>
 		<script src="libs/plantuml-encoder/plantuml-encoder.min.js"></script>
 		<script src="libs/highlight.js/highlight.min.js"></script>
-
 		<link rel="stylesheet" href="libs/katex/katex.min.css" />
 		<link rel="stylesheet" href="libs/highlight.js/default.min.css" />
 		<!-- SVG grid CSS -->
@@ -27,15 +26,19 @@
 		<svg style="display:none" aria-hidden="true" id="svgContainerForIcons">
 			<defs id="icon-defs"></defs>
 		</svg>
-		<h2>📝 Live Preview</h2>
-
-		<div id="plantUmlControls">
-			<label for="serverSelect">🌐 PlantUML Server:</label>
-			<select id="serverSelect">
-				<option value="https://www.plantuml.com/plantuml">plantuml.com</option>
-				<option value="http://localhost:8080" selected>localhost:8080</option>
-			</select>
-		</div>
+		<header id="settingsBar">
+			<h2>📝 Live Preview</h2>
+			<div id="themeToggleContainer">
+				<label class="toggleLabel">
+					Theme:
+					<select id="themeToggle">
+						<option value="light">Light</option>
+						<option value="dark">Dark</option>
+					</select>
+				</label>
+			</div>
+			<div id="dynamicControls"></div>
+		</header>
 
 		<div id="theMother">Waiting for content…</div>
 

@@ -1,6 +1,27 @@
 body { padding: 2rem; font-family: sans-serif; }
+body.light {
+	background: #fff;
+	color: #111;
+}
+body.dark {
+	background: #1e1e1e;
+	color: #ddd;
+}
+#settingsBar {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	border-bottom: 1px solid #ccc;
+	padding: 0.5rem 1rem;
+	background: var(--bar-bg, rgba(240,240,240,0.8));
+}
+body.dark #settingsBar {
+	--bar-bg: rgba(40,40,40,0.8);
+}
+#dynamicControls {
+	flex: 1;
+}
 #theMother { max-width: 100%; margin: auto; }
-#plantUmlControls { display: none; margin-bottom: 1rem; }
 .svg-download-btn {
 	display: inline-block;
 	margin-top: 0.3rem;
