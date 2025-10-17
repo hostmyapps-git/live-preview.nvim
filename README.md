@@ -42,8 +42,7 @@ vim.g.live_preview_options = {
 			{ name = "tabler",    path = "iconpacks/tabler.json" },
 			{ name = "lucide",    path = "iconpacks/lucide.json" },
 			{ name = "affinity",  path = "iconpacks/affinity.json" },
-			{ name = "organizations",  path = "~/Documents/work/CGI/CGI_documents/Templates/mermaid/organizationLogos.json" },
-			--{ name = "organizations",  path = "iconpacks/organizationLogos.json" },
+			--{ name = "yourIconpack",  path = "path to your iconpack" },
 		},
 	},
 	plantuml = {
@@ -57,8 +56,7 @@ vim.g.live_preview_options = {
 			{ name = "tabler",    path = "iconpacks/tabler.json" },
 			{ name = "lucide",    path = "iconpacks/lucide.json" },
 			{ name = "affinity",  path = "iconpacks/affinity.json" },
-			{ name = "organizations",  path = "~/Documents/work/CGI/CGI_documents/Templates/mermaid/organizationLogos.json" },
-			--{ name = "organizations",  path = "iconpacks/organizationLogos.json" },
+			--{ name = "yourIconpack",  path = "path to your iconpack" },
 		},
 	},
 }
