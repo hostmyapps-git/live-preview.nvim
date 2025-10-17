@@ -24,40 +24,43 @@ Insert the following to your nvim configuration
 
 ```lua
 vim.g.live_preview_options = {
-    general = {
-        autoscroll = true,
-        width = "100%",
-    },
-    libraries = {
-			-- { name = "your script",  path = "path to your script" },
-    },
-    stylesheets = {
-        { name = "stylesheet name", path="path to your stylesheet"},
-    },
-    mermaid = {
-        iconsets ={
-            { name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
-            { name = "logos",     path = "iconpacks/logos.json" },
-            { name = "tabler",    path = "iconpacks/tabler.json" },
-            { name = "lucide",    path = "iconpacks/lucide.json" },
-            { name = "affinity",  path = "iconpacks/affinity.json" },
-            -- { name = "your_icon_pack",  path = "path to your iconpack" },
-        },
-    },
-    plantuml = {
-        server = "localhost:8080",
-        imageFormat = "svg",
-    },
-    svg={
-        iconsets = { 
-            { name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
-            { name = "logos",     path = "iconpacks/logos.json" },
-            { name = "tabler",    path = "iconpacks/tabler.json" },
-            { name = "lucide",    path = "iconpacks/lucide.json" },
-            { name = "affinity",  path = "iconpacks/affinity.json" },
-            -- { name = "your_icon_pack",  path = "path to your iconpack" },
-        },
-    },
+	general = {
+		autoscroll = true,
+		width = "100%",
+		defaultAppearance = "light", -- light | dark
+	},
+	libraries = {
+        -- { name = "your script name",  path = "path to your script" },
+	},
+	stylesheets = {
+        --{ name = "stylesheet name", path="path to your stylesheet"},
+	},
+	mermaid = {
+		iconsets ={
+			{ name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
+			{ name = "logos",     path = "iconpacks/logos.json" },
+			{ name = "tabler",    path = "iconpacks/tabler.json" },
+			{ name = "lucide",    path = "iconpacks/lucide.json" },
+			{ name = "affinity",  path = "iconpacks/affinity.json" },
+			{ name = "organizations",  path = "~/Documents/work/CGI/CGI_documents/Templates/mermaid/organizationLogos.json" },
+			--{ name = "organizations",  path = "iconpacks/organizationLogos.json" },
+		},
+	},
+	plantuml = {
+		server = "localhost:8080",
+		imageFormat = "svg",
+	},
+	svg={
+		iconsets = { 
+			{ name = "fa6-solid", path = "iconpacks/fa6-solid.json" },
+			{ name = "logos",     path = "iconpacks/logos.json" },
+			{ name = "tabler",    path = "iconpacks/tabler.json" },
+			{ name = "lucide",    path = "iconpacks/lucide.json" },
+			{ name = "affinity",  path = "iconpacks/affinity.json" },
+			{ name = "organizations",  path = "~/Documents/work/CGI/CGI_documents/Templates/mermaid/organizationLogos.json" },
+			--{ name = "organizations",  path = "iconpacks/organizationLogos.json" },
+		},
+	},
 }
 ```
 
