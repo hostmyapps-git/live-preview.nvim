@@ -50,6 +50,8 @@ export function smoothScrollTo(data) {
 export function attachSvgDownloadButtons() {
 	document.querySelectorAll("#theMother svg").forEach((svg, index) => {
 		const btn = document.createElement("button");
+		// avoid svg which are embedded in an svg
+		if (svg.ownerSVGElement) return;
 		// avoid katex svg elementes
 		if (svg.closest(".katex")) return;
 		// avoid duplicated buttons
