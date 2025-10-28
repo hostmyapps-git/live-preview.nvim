@@ -1,4 +1,4 @@
-const logos = {
+const logos={
 	"prefix": "logos",
 	"icons": {
 		"100tb": {
@@ -8720,4 +8720,4 @@ const logos = {
 	"lastModified": 1754899799,
 	"width": 256,
 	"height": 256
-};
+}
