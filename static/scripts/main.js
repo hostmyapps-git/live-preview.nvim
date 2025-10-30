@@ -24,7 +24,9 @@ function applyLuaConfig(cfg) {
 	document.body.classList.remove("light", "dark");
 	document.body.classList.add(appearance);
 	document.getElementById("themeToggle").value=appearance;
-	if (cfg.plantuml?.server) {
+	const existingPlantUmlServer=root.getAttribute("data-plantuml-server");
+	const hasUserValue = existingPlantUmlServer && existingPlantUmlServer.trim()!=="";
+	if (cfg.plantuml?.server && !hasUserValue) {
 		const normalized = cfg.plantuml.server.startsWith("http")
 			? cfg.plantuml.server
 			: `http://${cfg.plantuml.server}`;

@@ -33,6 +33,7 @@ export function ensurePlantUmlControls() {
 
 function removePlantUmlControls(){
 	if (document.getElementById("plantUmlControls")) document.getElementById("plantUmlControls").remove();
+		document.documentElement.removeAttribute("data-plantuml-server");
 	return true;
 }
 
