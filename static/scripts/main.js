@@ -9,7 +9,7 @@ import { renderMath } from "./render/katex.js";
 import { highlightAll } from "./render/highlight.js";
 import { renderSvgImgBlocks } from "./render/svgimg.js";
 import { loadSVGIconPacks } from "./svg/icons.js";
-import { appendInlinedStyles, appendInlinedScripts, smoothScrollTo, attachSvgDownloadButtons } from "./utils.js";
+import { appendInlinedStyles, appendInlinedScripts, smoothScrollTo,  attachSvgDownloadToolbars } from "./utils.js";
 
 const theMother = document.querySelector("#theMother");
 let mermaidIconsRegistered = false;
@@ -101,7 +101,7 @@ export async function handleMessage(data) {
 		renderMath(theMother);
 		highlightAll();
 		// insert download buttons
-		attachSvgDownloadButtons(theMother);
+		attachSvgDownloadToolbars();
 		appendInlinedStyles(cfg);
 		appendInlinedScripts(cfg);
 		smoothScrollTo(data);
