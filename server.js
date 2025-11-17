@@ -17,7 +17,6 @@ app.use((err, req, res, next) => {
 	const fs = require("fs");
 	const path = require("path");
 	const logPath = path.join(__dirname, "server_error.log");
-
 	// catch typical bodyparser errors
 	if (err.type === "entity.too.large" || err.status === 413) {
 		const msg = `[${new Date().toISOString()}] ⚠️ Payload to large (${req.headers["content-length"] || "?"} Bytes), only ${payloadLimit} allowed.\n`;
@@ -25,7 +24,6 @@ app.use((err, req, res, next) => {
 		console.error(msg.trim());
 		return res.status(413).send("Payload Too Large");
 	}
-
 	// general fallback
 	const msg = `[${new Date().toISOString()}] ❌ unexpected server error: ${err.message}\n`;
 	fs.appendFileSync(logPath, msg);
@@ -33,13 +31,15 @@ app.use((err, req, res, next) => {
 	res.status(500).send("Internal Server Error");
 });
 
-// POST /update – Daten von Neovim empfangen
+// POST /update – receive data vom neovim
 app.post("/update", (req, res) => {
 	try {
 		const data = JSON.parse(req.body);
-		// 🔍 Debug-Log in Datei schreiben
+		// 🔍 Debug-Log 
 		const fs = require("fs");
-		fs.writeFileSync("last_payload.json", req.body);
+		const path = require("path");
+		const payloadPath = path.join(__dirname, "last_payload.json");
+		fs.writeFileSync(payloadPath, req.body);
 		lastContent = data;
 
 		wss.clients.forEach((client) => {
@@ -55,9 +55,9 @@ app.post("/update", (req, res) => {
 	}
 });
 
-// 🛑 POST /exit – Server beenden (z. B. bei VimLeave)
+// 🛑 POST /exit – Server exit (e.g. VimLeave)
 app.post("/exit", (req, res) => {
-	console.log("🛑 Exit-Befehl empfangen – Server fährt runter.");
+	console.log("🛑 Exit-Command received – Server shut down.");
 	res.sendStatus(200);
 	clearInterval(interval);
 	server.close(() => {
@@ -66,9 +66,9 @@ app.post("/exit", (req, res) => {
 	});
 });
 
-// WebSocket: Verbindung aufbauen + Ping/Pong
+// WebSocket: establish connection + Ping/Pong
 wss.on("connection", (ws) => {
-	console.log("🔌 Browser verbunden");
+	console.log("🔌 Browser connected");
 	ws.isAlive = true;
 
 	ws.on("pong", () => {
@@ -80,11 +80,11 @@ wss.on("connection", (ws) => {
 	}
 });
 
-// ♻️ Ping alle 30 Sekunden → hält Verbindung aktiv
+// ♻️ Ping all 30 seconds → keep connection alive
 const interval = setInterval(() => {
 	wss.clients.forEach((ws) => {
 		if (ws.isAlive === false) {
-			console.log("⚠️ Verbindung getrennt – WebSocket-Termination");
+			console.log("⚠️ Verbindung closed – WebSocket-Termination");
 			return ws.terminate();
 		}
 		ws.isAlive = false;
@@ -99,14 +99,14 @@ wss.on("close", () => {
 // 🔒 Server starten mit Fehlerbehandlung
 const PORT = 8765;
 server.listen(PORT, "127.0.0.1", () => {
-	console.log(`✅ Server läuft unter http://localhost:${PORT}`);
+	console.log(`✅ Server running: http://localhost:${PORT}`);
 });
 
 server.on("error", (err) => {
 	if (err.code === "EADDRINUSE") {
-		console.error(`❌ Port ${PORT} ist bereits in Verwendung.`);
+		console.error(`❌ Port ${PORT} is already in use.`);
 	} else {
-		console.error("❌ Serverfehler:", err);
+		console.error("❌ Server Error:", err);
 	}
 	process.exit(1);
 });
