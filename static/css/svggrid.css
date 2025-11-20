@@ -6,6 +6,8 @@
 	--cellGapPx:calc(var(--cellGap) * 1px);
 	--totalCellDim:calc(var(--cellDim) + var(--cellGap));
 	--totalCellDimPx:calc(var(--totalCellDim) * 1px);
+	--iconDim:calc(var(--cellDim) / 2);
+	--iconDimPx:calc(var(--iconDim) * 1px);
 	--font-size:calc(var(--cellDimPx)/8);
 	--font-size-big:calc(1.5*(var(--font-size)));
 	--font-size-medium:calc(1.25*(var(--font-size)));
@@ -72,8 +74,8 @@
 	}
 	.item .icon {
 		--scale: calc(min(3/2,var(--cellDim)/var(--iconDim)));
-		--translateX: calc(var(--cellDimPx)/2 - var(--iconDimPx)*3/4);
-		--translateY: calc(var(--cellDimPx)/2);
+		--translateX: calc(var(--cellDimPx)/2 - var(--iconDimPx)/2);
+		--translateY: calc(var(--cellDimPx)/2 - var(--iconDimPx)/4);
 		transform: 
 			translate(var(--translateX),var(--translateY))
 			scale(var(--scale));
