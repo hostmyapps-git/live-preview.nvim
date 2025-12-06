@@ -20,10 +20,13 @@ function applyLuaConfig(cfg) {
 	if (!cfg) return;
 	const root = document.documentElement;
 	const appearance = cfg.general?.defaultAppearance || "light";
-	root.setAttribute("data-theme", appearance);
-	document.body.classList.remove("light", "dark");
-	document.body.classList.add(appearance);
-	document.getElementById("themeToggle").value=appearance;
+	const currentAppearance=root.getAttribute("data-theme");
+	if (!currentAppearance){
+		root.setAttribute("data-theme", appearance);
+		document.body.classList.remove("light", "dark");
+		document.body.classList.add(appearance);
+		document.getElementById("themeToggle").value=appearance;
+	}
 	const existingPlantUmlServer=root.getAttribute("data-plantuml-server");
 	const hasUserValue = existingPlantUmlServer && existingPlantUmlServer.trim()!=="";
 	if (cfg.plantuml?.server && !hasUserValue) {

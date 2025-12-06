@@ -100,8 +100,11 @@
 	.itemLabel.big{
 		font-size: var(--font-size-big);
 		transform: 
+			translateY(calc(var(--cellDimPx)/2 + var(--font-size-big)/2));
+	}
+	.itemLabel.vertical{
+		transform:
 			translateX(calc((var(--w)*var(--cellDimPx) + (var(--w) - 1)*var(--cellGapPx))/2))
-			translateY(calc(var(--cellDimPx)/2 + var(--font-size-big)/2))
 			translateY(calc(var(--h)*var(--cellDimPx)/2 + (var(--h) - 1)*var(--cellGapPx)/2))
 			rotate(270deg);
 	}
