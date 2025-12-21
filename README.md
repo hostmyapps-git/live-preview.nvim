@@ -153,12 +153,12 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 |-----------------------------------------------------------------------|---------|
 | [chart.js](https://github.com/chartjs/Chart.js)                       | 4.5.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.11.1 |
-| [katex](https://github.com/KaTeX/KaTeX)                               | 0.16.25 |
+| [katex](https://github.com/KaTeX/KaTeX)                               | 0.16.27 |
 | [markdown-it](https://github.com/markdown-it/markdown-it)             | 14.1.0  |
 | [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 11.12.2 |
 | [plantuml-encoder](https://github.com/markushedvall/plantuml-encoder) | 1.4.0   |
 | [textile.js](https://github.com/borgar/textile-js)                    | 2.1.1   |
-| [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.20.0  |
+| [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.24.0  |
 
 ### Iconpacks
 
@@ -169,6 +169,6 @@ The following iconpacks are included in `static/iconpacks`. Setup your own iconp
 | [affinity](https://github.com/ecceman/affinity)| 2025-10-14 |
 | [@iconify-json/fa6-solid](https://icon-sets.iconify.design/fa6-solid/) | 1.2.4 |
 | [@iconify-json/logos](https://icon-sets.iconify.design/logos/) | 1.2.10 |
-| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.79 |
-| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.23 |
+| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.82 |
+| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.24 |
 
