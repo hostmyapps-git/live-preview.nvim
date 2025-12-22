@@ -5,6 +5,7 @@ import { renderMermaidBlocks, loadMermaidIconPacks } from "./render/mermaid.js";
 import { ensurePlantUmlControls, renderPlantUML, updatePlantUmlImages } from "./render/plantuml.js";
 import { renderGraphviz } from "./render/graphviz.js";
 import { renderChartJs } from "./render/chart.js";
+import { renderD2 } from "./render/d2.js";
 import { renderMath } from "./render/katex.js";
 import { highlightAll } from "./render/highlight.js";
 import { renderSvgImgBlocks } from "./render/svgimg.js";
@@ -103,6 +104,7 @@ export async function handleMessage(data) {
 		await renderGraphviz();
 		await renderChartJs();
 		renderPlantUML();
+		await renderD2(data.format);
 		renderMath(theMother);
 		highlightAll();
 		// insert download buttons
