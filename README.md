@@ -88,6 +88,7 @@ If not detected automatically set it with `:setfiletype markdown`, `:setfiletype
 * Graphviz and dot is supported by using ` ```dot`
 * Plantuml is supported by using ` ```plantuml`
 * chart.js is supported by using ` ```chart`
+* d2 is supported by using ` ```d2`
 * Math is supported by katex by using ` ```katex`
 * Chemistry is supported by katex mhchm by using ` ```mhchem`
 * svg is supported by using ` ```svgimg`
@@ -151,6 +152,7 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 
 | Library                                                               | Version |
 |-----------------------------------------------------------------------|---------|
+| [d2.js](https://github.com/terrastruct/d2/tree/master/d2js)           | 0.1.33  |
 | [chart.js](https://github.com/chartjs/Chart.js)                       | 4.5.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.11.1 |
 | [katex](https://github.com/KaTeX/KaTeX)                               | 0.16.27 |
