@@ -66,6 +66,23 @@ vim.g.live_preview_options = {
 * `:LivePreview`
 * `:LivePreviewStop`
 * `:LivePreviewDebug on|off`
+* `:LivePreviewHelper`
+
+### :LivePreview
+
+Starts the plugin and opens a new browser window for live preview.
+
+### :LivePreviewStop
+
+Stops the plugin. Browser windows need to be closed manually.
+
+### :LivePreviewHelper
+
+Performs a vsplit in order to open a buffer to the left. The helper provides code snippets for diagram creation.
+
+### :LivePreviewDebug on|off
+
+Enables additional debug capabilities. Off bei default.
 
 ## Language Support
 

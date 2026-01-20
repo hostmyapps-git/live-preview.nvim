@@ -1,3 +1,4 @@
+local livePreviewHelper =require("live-preview/livePreviewHelper")
 M = {}
 
 local groupName = "hostmyapps/LivePreview"
@@ -333,6 +334,11 @@ function M.setup()
 		callback = function()
 			vim.api.nvim_create_user_command("LivePreview", M.start, {})
 			vim.api.nvim_create_user_command("LivePreviewStop", M.stop, {})
+			vim.api.nvim_create_user_command("LivePreviewHelper",
+				function()
+					livePreviewHelper.open_mermaid_pane()
+				end, {}
+			)
 			vim.api.nvim_create_user_command("LivePreviewDebug", M.setDebug, {
 				nargs = 1,
 				complete = function()
