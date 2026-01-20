@@ -1,5 +1,6 @@
 # 📝Live-Preview
 Live Preview is a neovim plugin, designed to generate realtime preview of markdown and textile documents while editing in neovim. The idea was inspired by the retired [iamcco/markdownpreview.nvim](https://github.com/iamcco/markdown-preview.nvim) plugin.
+In addition LivePreview offers the capability of additional icons and diagram code snippets not included in the original markdownpreview.nvim plugn.
 
 ## Installation
 
