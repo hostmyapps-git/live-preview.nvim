@@ -114,10 +114,14 @@ export async function renderMermaidBlocks(format) {
 	}
 
 	// Render and attach buttons once rendering is done
-	try {
-		await mermaid.init(undefined, document.querySelectorAll(".mermaid"));
-		console.log("✅ Mermaid diagrams rendered");
-	} catch (err) {
-		console.error("[renderMermaidBlocks] Mermaid rendering failed:", err);
+	for (const container of document.querySelectorAll(".mermaid")){
+		try {
+			await mermaid.init(undefined, container);
+			console.log("✅ Mermaid diagram rendered");
+		} catch (err) {
+			console.error("[renderMermaidBlocks] Mermaid rendering failed:", err);
+			container.innerHTML = `<div class="error"><strong>Mermaid Error:</strong><br>${err.message || err}</div>`;
+
+		}
 	}
 }

@@ -9,7 +9,7 @@ local presets = {
 	{ label = "flowchart TD", code = "flowchart TD\n\t" },
 	{ label = "flowchart LR", code = "flowchart LR\n\t" },
 	{label = 'flowchart RL', code = 'flowchart RL'},
-	{ label = "subgraph TD", code = "subgraph id[Headline]\n\tdirection TD\n\t\nend" },
+	{ label = "subgraph TB", code = "subgraph id[Headline]\n\tdirection TB\n\t\nend" },
 	{ label = "subgraph LR", code = "subgraph id[Headline]\n\tdirection LR\n\t\nend" },
 	{ label = "subgraph RL", code = "subgraph id[Headline]\n\tdirection RL\n\t\nend" },
 	{subcategory = "Nodes"},
