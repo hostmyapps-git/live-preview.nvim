@@ -195,6 +195,8 @@ local function buildMessage(bufnr)
 	local format = (filetype == "textile") and "textile" or "markdown"
 	if filetype == "textile" then 
 		format = "textile"
+	elseif filetype =="html" then
+		format = "html"
 	elseif filetype == "svg" then
 		format = "svg"
 	else 
@@ -263,7 +265,7 @@ function M.start()
 		pattern = { "*" },
 		callback = function(args)
 			local ft=vim.bo[args.buf].filetype
-			if ft ~= "markdown" and ft ~= "textile" and ft ~="svg" then return end 
+			if ft ~= "markdown" and ft ~= "textile" and ft ~="svg" and ft ~="html" then return end 
 			if vim.b[args.buf].live_preview_attached then return end
 			vim.b[args.buf].live_preview_attached = true
 			vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged", "TextChangedI" }, {
@@ -282,7 +284,7 @@ function M.start()
 	-- Letzte Sicherheits-Sendung (z. B. falls Filetype schon gesetzt ist)
 	vim.defer_fn(function()
 		local ft = vim.bo.filetype
-		if ft == "markdown" or ft == "textile" or ft == "svg" then
+		if ft == "markdown" or ft == "textile" or ft == "svg" or ft == "html" then
 			M.send(vim.api.nvim_get_current_buf())
 		end
 	end, 300)
@@ -330,7 +332,7 @@ end
 function M.setup()
 	-- Commands nur für markdown/textile setzen
 	vim.api.nvim_create_autocmd("FileType", {
-		pattern = { "markdown", "textile", "svg" },
+		pattern = { "markdown", "textile", "svg", "html" },
 		callback = function()
 			vim.api.nvim_create_user_command("LivePreview", M.start, {})
 			vim.api.nvim_create_user_command("LivePreviewStop", M.stop, {})

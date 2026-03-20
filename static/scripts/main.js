@@ -79,8 +79,8 @@ export async function handleMessage(data) {
 			html = md.render(data.content);
 		} else if (data.format === "textile") {
 			html = textile(data.content);
-		} else if (data.format === "svg") {
-			html = data.content; // 🔹 apply svg directly
+		} else if (data.format === "svg" || data.format === "html") {
+			html = data.content; // 🔹 apply svg and html directly
 		} else {
 			html = "<pre>Unknown format: " + data.format + "</pre>";
 			let html = renderContent(data);
