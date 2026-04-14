@@ -107,6 +107,7 @@ If not detected automatically set it with `:setfiletype markdown`, `:setfiletype
 * Plantuml is supported by using ` ```plantuml`
 * chart.js is supported by using ` ```chart`
 * d2 is supported by using ` ```d2`
+* Tikz is supported by using ` ```tikz`
 * Math is supported by katex by using ` ```katex`
 * Chemistry is supported by katex mhchm by using ` ```mhchem`
 * svg is supported by using ` ```svgimg`
@@ -178,6 +179,7 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 | [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 11.14.0 |
 | [plantuml-encoder](https://github.com/markushedvall/plantuml-encoder) | 1.4.0   |
 | [textile.js](https://github.com/borgar/textile-js)                    | 2.1.1   |
+| [tikz.js](https://https://github.com/hostmyapps-git/tikz.js)          | 0.1.0   |
 | [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.25.0  |
 
 ### Iconpacks

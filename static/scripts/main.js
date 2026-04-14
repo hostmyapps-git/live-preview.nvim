@@ -9,6 +9,7 @@ import { renderD2 } from "./render/d2.js";
 import { renderMath } from "./render/katex.js";
 import { highlightAll } from "./render/highlight.js";
 import { renderSvgImgBlocks } from "./render/svgimg.js";
+import { renderTikzBlocks } from "./render/tikz.js";
 import { loadSVGIconPacks } from "./svg/icons.js";
 import { appendInlinedStyles, appendInlinedScripts, smoothScrollTo,  attachSvgDownloadToolbars } from "./utils.js";
 
@@ -104,6 +105,7 @@ export async function handleMessage(data) {
 		await renderGraphviz();
 		await renderChartJs();
 		renderPlantUML();
+		renderTikzBlocks(data.format);
 		await renderD2(data.format);
 		renderMath(theMother);
 		highlightAll();
