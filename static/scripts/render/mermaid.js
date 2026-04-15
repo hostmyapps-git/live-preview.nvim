@@ -96,6 +96,7 @@ export async function renderMermaidBlocks(format) {
 		mermaidBlocks = document.querySelectorAll("code.language-mermaid");
 	} else if (format === "textile") {
 		mermaidBlocks = document.querySelectorAll("code.mermaid");
+		console.log("mermaidBlocks:",mermaidBlocks);
 	}
 
 	// Convert all code blocks into .mermaid containers

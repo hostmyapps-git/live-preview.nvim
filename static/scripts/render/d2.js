@@ -20,7 +20,7 @@ export async function renderD2(format) {
 	if (format === "markdown") {
 		d2Blocks = document.querySelectorAll("code.language-d2");
 	} else if (format === "textile") {
-		mermaidBlocks = document.querySelectorAll("code.d2");
+		d2Blocks = document.querySelectorAll("code.d2");
 	}
 
 	// Convert all code blocks into .mermaid containers

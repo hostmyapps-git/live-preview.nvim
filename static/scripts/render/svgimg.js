@@ -1,6 +1,12 @@
 // render/svgimg.js
-export function renderSvgImgBlocks(container) {
-  const blocks = container.querySelectorAll("code.language-svgimg");
+export function renderSvgImgBlocks(format) {
+	let blocks = [];
+
+	if (format === "markdown") {
+		blocks = document.querySelectorAll("code.language-svgimg");
+	} else if (format === "textile") {
+		blocks = document.querySelectorAll("code.svgimg");
+	}
   blocks.forEach(block => {
     try {
       const div = document.createElement("div");

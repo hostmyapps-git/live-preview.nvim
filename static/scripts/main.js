@@ -87,7 +87,6 @@ export async function handleMessage(data) {
 			let html = renderContent(data);
 		}
 		theMother.innerHTML = html;
-		renderSvgImgBlocks(theMother);
 
 		if (!(mermaidIconsRegistered && svgIconsRegistered)) {
 			await loadIconPacks(cfg);
@@ -106,6 +105,7 @@ export async function handleMessage(data) {
 		await renderChartJs();
 		renderPlantUML();
 		renderTikzBlocks(data.format);
+		renderSvgImgBlocks(data.format);
 		await renderD2(data.format);
 		renderMath(theMother);
 		highlightAll();
