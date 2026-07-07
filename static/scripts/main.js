@@ -75,17 +75,7 @@ export async function handleMessage(data) {
 		const cfg = data.config || {};
 		applyLuaConfig(cfg);
 		bootstrapLibraries(cfg);
-		let html = "";
-		if (data.format === "markdown") {
-			html = md.render(data.content);
-		} else if (data.format === "textile") {
-			html = textile(data.content);
-		} else if (data.format === "svg" || data.format === "html") {
-			html = data.content; // 🔹 apply svg and html directly
-		} else {
-			html = "<pre>Unknown format: " + data.format + "</pre>";
-			let html = renderContent(data);
-		}
+		let html = renderContent(data);
 		theMother.innerHTML = html;
 
 		if (!(mermaidIconsRegistered && svgIconsRegistered)) {
