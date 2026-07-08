@@ -1,5 +1,5 @@
 local livePreviewHelper =require("live-preview/livePreviewHelper")
-M = {}
+local M = {}
 
 local groupName = "hostmyapps/LivePreview"
 local autoGroup = nil
@@ -188,23 +188,19 @@ local function enrichConfig(cfg)
 	return cfg
 end
 
-local function buildMessage(bufnr)
+local function buildMessage(bufnr, opts)
+	opts = opts or {}
 	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 	local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
 	local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-	local format = (filetype == "textile") and "textile" or "markdown"
+	local format = "markdown"
 	if filetype == "textile" then 
 		format = "textile"
 	elseif filetype =="html" then
 		format = "html"
 	elseif filetype == "svg" then
 		format = "svg"
-	else 
-		format = "markdown"
 	end
-	local config = enrichConfig(vim.g.live_preview_options or {})
-
-	-- Kontext: ±5 Zeilen um die Cursorposition
 	local context = {}
 	for i = math.max(1, row - 5), math.min(#lines, row + 5) do
 		local line = lines[i]
@@ -212,17 +208,28 @@ local function buildMessage(bufnr)
 			table.insert(context, vim.trim(line))
 		end
 	end
-	return vim.fn.json_encode({
+	local payload = {
 		format = format,
-		content = table.concat(lines, "\n"),
-		config = config,
-		cursor = { row, row },
-		context_lines = context,
-	})
+		content = table.concat(lines,"\n"),
+		cursor = {row, row}, -- only row is required for scrolling
+		context_lines =context,
+	}
+	if opts.init then
+		payload.config = enrichConfig(vim.g.live_preview_options or {})
+	end
+	return vim.fn.json_encode(payload)
 end
 
-function M.send(bufnr)
-	local msg = buildMessage(bufnr)
+local initSent = false
+
+local function sendInit(bufNr)
+	if initSent then return end
+	M.send(bufNr, {init =true})
+	initSent = true
+end
+
+function M.send(bufnr, opts)
+	local msg = buildMessage(bufnr, opts)
 	local size = #msg
 	dbg(string.format("[LivePreview] Payload size: %d bytes", size))
 	--utf-8 check
@@ -258,6 +265,7 @@ function M.start()
 		print("[LivePreview] Bereits aktiv.")
 		return
 	end
+	initSent = false -- resend init data after server start/restart
 	startServer()
 	autoGroup = vim.api.nvim_create_augroup(groupName, { clear = true })
 	vim.api.nvim_create_autocmd({"BufEnter", "InsertEnter", "FileType", "BufWinEnter"}, {
@@ -277,7 +285,7 @@ function M.start()
 			})
 			-- Initialsendung direkt nach Setzen des Filetypes
 			vim.defer_fn(function()
-				M.send(args.buf)
+				sendInit(args.buf)
 			end, 100)
 		end,
 	})
@@ -285,7 +293,7 @@ function M.start()
 	vim.defer_fn(function()
 		local ft = vim.bo.filetype
 		if ft == "markdown" or ft == "textile" or ft == "svg" or ft == "html" then
-			M.send(vim.api.nvim_get_current_buf())
+			sendInit(vim.api.nvim_get_current_buf())
 		end
 	end, 300)
 	openBrowser()
@@ -309,6 +317,7 @@ function M.stop()
 		print("[LivePreview] Nicht aktiv.")
 		return
 	end
+	initSent=false
 	vim.api.nvim_del_augroup_by_name(groupName)
 	autoGroup = nil
 	isActive = false

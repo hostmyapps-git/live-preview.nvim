@@ -47,7 +47,7 @@ app.post("/update", (req, res) => {
 				client.send(JSON.stringify(data));
 			}
 		});
-
+		//console.log("server update successful");
 		res.sendStatus(200);
 	} catch (e) {
 		console.error("❌ Fehler beim Parsen:", e);

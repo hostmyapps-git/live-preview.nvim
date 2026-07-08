@@ -22,8 +22,8 @@ export async function postProcessDocument(data, cfg, root) {
 		() => renderMath(root),
 		() => highlightAll(),
 		() => attachSvgDownloadToolbars(),
-		() => appendInlineStyles(cfg),
-		() => appendInlineScripts(cfg),
+		() => appendInlinedStyles(cfg),
+		() => appendInlinedScripts(cfg),
 		() => smoothScrollTo(data),
 	];
 	for (const step of steps) {
