@@ -174,13 +174,13 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 | [d2.js](https://github.com/terrastruct/d2/tree/master/d2js)           | 0.1.33  |
 | [chart.js](https://github.com/chartjs/Chart.js)                       | 4.5.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.11.1 |
-| [katex](https://github.com/KaTeX/KaTeX)                               | 0.17.0  |
-| [markdown-it](https://github.com/markdown-it/markdown-it)             | 14.3.0  |
-| [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 11.16.0 |
+| [katex](https://github.com/KaTeX/KaTeX)                               | 0.18.4  |
+| [markdown-it](https://github.com/markdown-it/markdown-it)             | 15.0.1  |
+| [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 11.17.2 |
 | [plantuml-encoder](https://github.com/markushedvall/plantuml-encoder) | 1.4.0   |
 | [textile.js](https://github.com/borgar/textile-js)                    | 2.1.1   |
 | [tikz.js](https://https://github.com/hostmyapps-git/tikz.js)          | 0.1.0   |
-| [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.28.0  |
+| [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.29.0  |
 
 ### Iconpacks
 
@@ -190,7 +190,7 @@ The following iconpacks are included in `static/iconpacks`. Setup your own iconp
 | ---|---|
 | [affinity](https://github.com/ecceman/affinity)| 2025-10-14 |
 | [@iconify-json/fa6-solid](https://icon-sets.iconify.design/fa6-solid/) | 1.2.4 |
-| [@iconify-json/logos](https://icon-sets.iconify.design/logos/) | 1.2.11 |
-| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.116 |
-| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.35 |
+| [@iconify-json/logos](https://icon-sets.iconify.design/logos/) | 1.2.13 |
+| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.126 |
+| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.38 |
 
