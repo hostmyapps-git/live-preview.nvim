@@ -9,7 +9,6 @@ const wss = new WebSocket.Server({ server });
 const payloadLimit = "100mb";
 let lastContent = null;
 
-
 // Middleware
 app.use(bodyParser.text({ type: "*/*", limit: payloadLimit}));
 app.use(express.static(path.join(__dirname, "static")));
@@ -59,11 +58,7 @@ app.post("/update", (req, res) => {
 app.post("/exit", (req, res) => {
 	console.log("🛑 Exit-Command received – Server shut down.");
 	res.sendStatus(200);
-	clearInterval(interval);
-	server.close(() => {
-		console.log("Server process closed");
-		process.exit(0);
-	});
+	shutdown("POST /exit");
 });
 
 // WebSocket: establish connection + Ping/Pong
@@ -110,3 +105,24 @@ server.on("error", (err) => {
 	}
 	process.exit(1);
 });
+
+process.on("SIGINT", () => shutdown ("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+function shutdown(source) {
+	console.log(`Shoutdown initiated (${source}) - Server shutting down.`);
+	clearInterval(interval);
+	wss.clients.forEach( (ws) => {
+		try{
+			ws.terminate();
+		}
+		catch (e){}
+	});
+	wss.close(()=>{
+		server.close(()=>{
+			console.log("Server Process closed cleanly");
+			process.exit(0);
+		});
+	})
+	setTimeout(() => process.exit(0), 500).unref();
+}

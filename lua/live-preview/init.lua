@@ -73,6 +73,8 @@ local function startServer()
 end
 
 local function stopServer()
+	-- send exit signal to Node.js first
+	vim.fn.jobstart({"curl", "-s", "-X", "POST", previewUrl .. "/exit"}, {detach = true})
 	if serverPid then
 		pcall(vim.fn.jobstop, serverPid)
 		dbg("[LivePreview] Server gestoppt.")
@@ -96,9 +98,9 @@ end
 
 local function readFile(path)
 	path = vim.fn.expand(path)
-	local f = io.open(path, "r")
+	local f = io.open(path, "rb")
 	if not f then 
-		print("[LivePreview] Datei nicht gefunden:", path)
+		print("[LivePreview] file not found:", path)
 		return nil
 	end
 	local content = f:read("*a")
@@ -108,7 +110,7 @@ end
 
 local function isWithinServerPath(path)
 	local plugin_path = debug.getinfo(1, "S").source:sub(2):gsub("/init%.lua", "")
-	local static_root = vim.fn.resolve(plugin_path .. "/../../static/")
+	local static_root = vim.fn.resolve(plugin_path .. "/../../static") .. "/"
 	local resolved = vim.fn.resolve(vim.fn.expand(path))
 	return resolved:find(static_root, 1, true) == 1
 end
@@ -119,7 +121,12 @@ local function resolvePath(path)
 		return expanded
 	end
 	local plugin_path = debug.getinfo(1, "S").source:sub(2):gsub("/init%.lua", "")
-	return plugin_path .. "/../../static/" .. expanded
+	local staticFile = plugin_path .. "/../../static/" .. expanded
+	if vim.fn.filereadable(staticFile) == 1 then
+		return staticFile
+	end
+	-- if file not in plugin-static folder, use path relative to current working directory
+	return vim.fn.fnamemodify(expanded, ":p")
 end
 
 local function enrichConfig(cfg)
@@ -175,9 +182,8 @@ local function enrichConfig(cfg)
 							name = pack.name,
 							content = content,
 						})
-						cfg._inlined_iconsets = cfg._inlined_iconsets
 					else
-						print("[LuaMarkdownPreview] ⚠️ External iconset not found: " .. resolved)
+						print("[LivePreview] ⚠️ External iconset not found: " .. resolved)
 					end
 					-- ⛔ skip adding pack to filtered (avoid duplicate)
 				end
@@ -217,7 +223,12 @@ local function buildMessage(bufnr, opts)
 	if opts.init then
 		payload.config = enrichConfig(vim.g.live_preview_options or {})
 	end
-	return vim.fn.json_encode(payload)
+	local ok, encoded = pcall(vim.fn.json_encode, payload)
+	if not ok then
+		dbg("[LivePreview] JSON encode failed: " .. tostring (encoded))
+		return nil
+	end
+	return encoded
 end
 
 local initSent = false
@@ -225,39 +236,50 @@ local initSent = false
 local function sendInit(bufNr)
 	if initSent then return end
 	M.send(bufNr, {init =true})
-	initSent = true
 end
 
-function M.send(bufnr, opts)
-	local msg = buildMessage(bufnr, opts)
-	local size = #msg
-	dbg(string.format("[LivePreview] Payload size: %d bytes", size))
-	--utf-8 check
-	--if not vim.fn.eval('utf8_valid(' .. vim.fn.string(msg) .. ')') then
-	--	dbg("[LivePreview] ⚠️ invalid UTF-8-chars in Payload!")
-	--end
-	dbg("[LivePreview] Sending payload:\n" .. msg)
-	local ok, parsed = pcall(vim.fn.json_decode, msg)
-	if not ok then
-		dbg("[LivePreview] ⚠️ JSON decode failed — malformed payload!")
-	else
-		dbg(string.format("[LivePreview] ✅ JSON decode succeeded, keys: %s",
-			table.concat(vim.tbl_keys(parsed), ", ")
-		))
+function M.send(bufNr, opts)
+	opts = opts or {}
+	local isInit = opts.init == true
+	local msg = buildMessage(bufNr, opts)
+	if not msg then
+		dbg("[LivePreview] send failed: invalid payload")
+		return
 	end
-	vim.fn.jobstart({ "curl", "-s", "-X", "POST", "--data", msg, previewUrl .. "/update" }, {
+	local jobId = vim.fn.jobstart({"curl","-s","-X","POST","--data-binary", "@-", previewUrl .. "/update"}, {
 		stdout_buffered = true,
 		stderr_buffered = true,
-		on_stderr = function(_, data)
-			if data and #data > 0 then
-				dbg("[LivePreview ERROR/raw data]:", data);
-				dbg("[LivePreview ERROR]:", table.concat(data, "\n"))
+		on_stderr = function (_, data)
+			if data and #data > 0 and data[1] ~="" then
+				dbg("[LivePreview ERROR]: " .. table.concat(data, "\n"))
 			end
 		end,
-		on_exit = function(_, code, _)
+		on_exit = function (_,code,_)
 			dbg("[LivePreview EXIT]: curl exited with code " .. tostring(code))
+			if code == 0 then
+				if isInit then
+					initSent = true
+					dbg("[LivePreview] Init-Payload transmitted successfully")
+				end
+			else
+				dbg("[LivePreview] Transmission failed (Code: " .. tostring(code) ..")")
+				-- retry after 300ms
+				if isInit and not initSent and isActive then
+					vim.defer_fn (function()
+						if not initSent and isActive then
+							dbg("[LivePreview] Retry Init Transmission...")
+							sendInit(bufNr)
+						end
+					end, 300)
+				end
+			end
 		end,
 	})
+	-- transfer payload securely over stdin to curl
+	if jobId > 0 then
+		vim.fn.chansend(jobId, msg)
+		vim.fn.chanclose(jobId, "stdin")
+	end
 end
 
 function M.start()
@@ -314,10 +336,13 @@ end
 
 function M.stop()
 	if not isActive then
-		print("[LivePreview] Nicht aktiv.")
+		print("[LivePreview] not active")
 		return
 	end
 	initSent=false
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		vim.b[buf].live_preview_attached = nil
+	end
 	vim.api.nvim_del_augroup_by_name(groupName)
 	autoGroup = nil
 	isActive = false

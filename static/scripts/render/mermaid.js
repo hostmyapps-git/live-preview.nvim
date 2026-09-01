@@ -65,10 +65,10 @@ export async function loadMermaidIconPacks(cfg) {
 					try {
 						const data = await Promise.resolve(parsed); 
 						console.log(data);
-						console.log(`✅ Loaded ${data.prefix}:`, Object.keys(data.icons || data).length, "icons");
+						console.log(`✅ Loaded ${data.prefix || inline.name}:`, Object.keys(data.icons || data).length, "icons");
 						return data; 
 					} catch (err) {
-						console.error(`❌ Failed to load iconpack ${data.prefix}:`, err);
+						console.error(`❌ Failed to load iconpack ${inline.name}:`, err);
 						return {};
 					}
 				}

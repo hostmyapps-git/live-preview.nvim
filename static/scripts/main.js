@@ -62,15 +62,15 @@ function setupThemeDropdown(defaultAppearance = "light") {
 }
 
 export async function handleMessage(data) {
-	console.log(data);
 	try {
-		const cfg = data.config || {};
-		applyLuaConfig(cfg);
-		bootstrapLibraries(cfg);
-		theMother.innerHTML = renderContent(data);
-		if (!(mermaidIconsRegistered && svgIconsRegistered)) {
-			await loadIconPacks(cfg);
+		if (data.config){
+			applyLuaConfig(data.config);
+			bootstrapLibraries(data.config);
+			setupThemeDropdown(data.config.general?.defaultAppearance || "light");
+			await loadIconPacks(data.config);
 		}
+		const cfg = window._livePreviewConfig || data.config || {};
+		theMother.innerHTML = renderContent(data);
 		if (data.format === "svg") {
 			const svgEl = theMother.querySelector("svg");
 			if (svgEl) {
@@ -79,7 +79,6 @@ export async function handleMessage(data) {
 			}
 		}
 		await postProcessDocument(data, cfg, theMother);
-		setupThemeDropdown(cfg.general?.defaultAppearance || "light");
 	} catch (err) {
 		theMother.innerHTML = `<pre>Parse Error: ${err.message}</pre>`;
 	}
