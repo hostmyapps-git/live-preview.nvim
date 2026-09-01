@@ -1,5 +1,12 @@
-export async function renderChartJs() {
-	const blocks = document.querySelectorAll("code.language-chart");
+export async function renderChartJs(format="markdown") {
+	let blocks = [];
+	const langIdentifier='chart';
+	if (format === "markdown") {
+		blocks = document.querySelectorAll(`code.language-${langIdentifier}`);
+	} 
+	else if (format === "textile") {
+		blocks = document.querySelectorAll(`code.${langIdentifier}`);
+	}
 	const promises = Array.from(blocks).map(async block => {
 		const source = block.textContent;
 		const container = document.createElement("div");

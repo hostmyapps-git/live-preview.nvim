@@ -3,7 +3,7 @@ const plantUmlControls = document.querySelector("#plantUmlControls");
 const serverSelect = document.querySelector("#serverSelect");
 
 export function ensurePlantUmlControls() {
-	const hasPlantUml = document.querySelector("code.language-plantuml") || document.querySelector("img.plantuml");
+	const hasPlantUml = document.querySelector("code.language-plantuml") || document.querySelector("code.plantuml") || document.querySelector("img.plantuml");
 	const existing = document.getElementById("plantUmlControls");
 	if (!hasPlantUml) {
 		console.log("no plantuml controls required");
@@ -37,9 +37,16 @@ function removePlantUmlControls(){
 	return true;
 }
 
-export function renderPlantUML() {
+export function renderPlantUML(format="markdown") {
 	console.log("enter renderPlantUML");
-	const blocks = document.querySelectorAll("code.language-plantuml");
+	let blocks = [];
+	const langIdentifier='plantuml';
+	if (format === "markdown") {
+		blocks = document.querySelectorAll(`code.language-${langIdentifier}`);
+	} 
+	else if (format === "textile") {
+		blocks = document.querySelectorAll(`code.${langIdentifier}`);
+	}
 	const plantUmlImages = document.querySelectorAll("img.plantuml");
 	console.log("[renderPlantUML]", blocks, blocks.length, plantUmlImages, plantUmlImages.length);
 	if (!blocks.length && !plantUmlImages.length) {

@@ -13,9 +13,9 @@ export async function postProcessDocument(data, cfg, root) {
 	const format = data?.format || "markdown";
 	const steps = [
 		() => renderMermaidBlocks(format),
-		() => renderGraphviz(),
-		() => renderChartJs(),
-		() => renderPlantUML(),
+		() => renderGraphviz(format),
+		() => renderChartJs(format),
+		() => renderPlantUML(format),
 		() => renderTikzBlocks(format),
 		() => renderSvgImgBlocks(format),
 		() => renderD2(format),

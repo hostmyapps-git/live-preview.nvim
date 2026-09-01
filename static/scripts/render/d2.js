@@ -23,8 +23,8 @@ export async function renderD2(format) {
 		d2Blocks = document.querySelectorAll("code.d2");
 	}
 
-	// Convert all code blocks into .mermaid containers
-	if (d2Blocks.length >=0) {
+	// Convert all code blocks into .d2 containers
+	if (d2Blocks.length > 0) {
 		try{
 			const d2 = await getD2();
 			for(const block of d2Blocks){
