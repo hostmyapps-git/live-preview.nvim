@@ -8,6 +8,9 @@ local previewUrl = "http://localhost:8765"
 local serverPid = nil
 local debugEnabled = false
 local logFile = vim.fn.stdpath("cache") .. "/live_preview.log"
+local uv = vim.uv or vim.loop
+local bufferTimers = {}
+local activeJobId = nil
 
 local function log(msg)
 	local f = io.open(logFile, "a")
@@ -223,7 +226,8 @@ local function buildMessage(bufnr, opts)
 	if opts.init then
 		payload.config = enrichConfig(vim.g.live_preview_options or {})
 	end
-	local ok, encoded = pcall(vim.fn.json_encode, payload)
+	local encode = (vim.json and vim.json.encode) or vim.fn.json_encode
+	local ok, encoded = pcall(encode, payload)
 	if not ok then
 		dbg("[LivePreview] JSON encode failed: " .. tostring (encoded))
 		return nil
@@ -238,6 +242,66 @@ local function sendInit(bufNr)
 	M.send(bufNr, {init =true})
 end
 
+local function getDebounceDelay()
+	local opts = vim.g.live_preview_options
+	if opts and opts.general and opts.general.debounce ~= nil then
+		return tonumber(opts.general.debounce) or 200
+	end
+	return 200
+end
+
+local function cleanTimer(bufnr)
+	local timer = bufferTimers[bufnr]
+	if timer then
+		if not timer:is_closing() then
+			timer:stop()
+			timer:close()
+		end
+		bufferTimers[bufnr] = nil
+	end
+end
+
+local function cleanAllTimers()
+	for bufnr, timer in pairs(bufferTimers) do
+		if not timer:is_closing() then
+			timer:stop()
+			timer:close()
+		end
+	end
+	bufferTimers = {}
+end
+
+local function scheduleSend(bufnr)
+	if not isActive or not vim.api.nvim_buf_is_valid(bufnr) then return end
+	local delay = getDebounceDelay()
+	if delay <= 0 then
+		M.send(bufnr)
+		return
+	end
+	local timer = bufferTimers[bufnr]
+	if not timer or timer:is_closing() then
+		timer = uv.new_timer()
+		bufferTimers[bufnr] = timer
+	else
+		timer:stop()
+	end
+	timer:start(delay, 0, vim.schedule_wrap(function()
+		if isActive and vim.api.nvim_buf_is_valid(bufnr) then
+			M.send(bufnr)
+		end
+	end))
+end
+
+local function flushSend(bufnr)
+	local timer = bufferTimers[bufnr]
+	if timer and not timer:is_closing() then
+		timer:stop()
+	end
+	if isActive and vim.api.nvim_buf_is_valid(bufnr) then
+		M.send(bufnr)
+	end
+end
+
 function M.send(bufNr, opts)
 	opts = opts or {}
 	local isInit = opts.init == true
@@ -246,7 +310,12 @@ function M.send(bufNr, opts)
 		dbg("[LivePreview] send failed: invalid payload")
 		return
 	end
-	local jobId = vim.fn.jobstart({"curl","-s","-X","POST","--data-binary", "@-", previewUrl .. "/update"}, {
+	-- cancel obsolete in-flight update job if starting a new regular update
+	if activeJobId and not isInit then
+		pcall(vim.fn.jobstop, activeJobId)
+		activeJobId = nil
+	end
+	local jobId = vim.fn.jobstart({"curl","-s","-f","-X","POST","--data-binary", "@-", previewUrl .. "/update"}, {
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_stderr = function (_, data)
@@ -256,6 +325,9 @@ function M.send(bufNr, opts)
 		end,
 		on_exit = function (_,code,_)
 			dbg("[LivePreview EXIT]: curl exited with code " .. tostring(code))
+			if activeJobId == jobId then
+				activeJobId = nil
+			end
 			if code == 0 then
 				if isInit then
 					initSent = true
@@ -275,6 +347,9 @@ function M.send(bufNr, opts)
 			end
 		end,
 	})
+	if not isInit and jobId > 0 then
+		activeJobId = jobId
+	end
 	-- transfer payload securely over stdin to curl
 	if jobId > 0 then
 		vim.fn.chansend(jobId, msg)
@@ -290,32 +365,54 @@ function M.start()
 	initSent = false -- resend init data after server start/restart
 	startServer()
 	autoGroup = vim.api.nvim_create_augroup(groupName, { clear = true })
+
+	local function attachBuffer(bufnr)
+		if not vim.api.nvim_buf_is_valid(bufnr) then return end
+		local ft = vim.bo[bufnr].filetype
+		if ft ~= "markdown" and ft ~= "textile" and ft ~= "svg" and ft ~= "html" then return end 
+		if vim.b[bufnr].live_preview_attached then return end
+		vim.b[bufnr].live_preview_attached = true
+		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+			group = autoGroup,
+			buffer = bufnr,
+			callback = function(ev)
+				flushSend(ev.buf)
+			end,
+		})
+		vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+			group = autoGroup,
+			buffer = bufnr,
+			callback = function(ev)
+				scheduleSend(ev.buf)
+			end,
+		})
+		vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
+			group = autoGroup,
+			buffer = bufnr,
+			callback = function(ev)
+				cleanTimer(ev.buf)
+			end,
+		})
+		-- Initialsendung direkt nach Setzen des Filetypes
+		vim.defer_fn(function()
+			sendInit(bufnr)
+		end, 100)
+	end
+
 	vim.api.nvim_create_autocmd({"BufEnter", "InsertEnter", "FileType", "BufWinEnter"}, {
 		group = autoGroup,
 		pattern = { "*" },
 		callback = function(args)
-			local ft=vim.bo[args.buf].filetype
-			if ft ~= "markdown" and ft ~= "textile" and ft ~="svg" and ft ~="html" then return end 
-			if vim.b[args.buf].live_preview_attached then return end
-			vim.b[args.buf].live_preview_attached = true
-			vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged", "TextChangedI" }, {
-				group = autoGroup,
-				buffer = args.buf,
-				callback = function(ev)
-					M.send(ev.buf)
-				end,
-			})
-			-- Initialsendung direkt nach Setzen des Filetypes
-			vim.defer_fn(function()
-				sendInit(args.buf)
-			end, 100)
+			attachBuffer(args.buf)
 		end,
 	})
+	local curBuf = vim.api.nvim_get_current_buf()
+	attachBuffer(curBuf)
 	-- Letzte Sicherheits-Sendung (z. B. falls Filetype schon gesetzt ist)
 	vim.defer_fn(function()
-		local ft = vim.bo.filetype
+		local ft = vim.bo[curBuf].filetype
 		if ft == "markdown" or ft == "textile" or ft == "svg" or ft == "html" then
-			sendInit(vim.api.nvim_get_current_buf())
+			sendInit(curBuf)
 		end
 	end, 300)
 	openBrowser()
@@ -340,6 +437,11 @@ function M.stop()
 		return
 	end
 	initSent=false
+	cleanAllTimers()
+	if activeJobId then
+		pcall(vim.fn.jobstop, activeJobId)
+		activeJobId = nil
+	end
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		vim.b[buf].live_preview_attached = nil
 	end

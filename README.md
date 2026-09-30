@@ -26,6 +26,7 @@ Insert the following to your nvim configuration
 ```lua
 vim.g.live_preview_options = {
 	general = {
+		debounce = 200, -- delay in ms before rendering changes (default: 200)
 		autoscroll = true,
 		width = "100%",
 		defaultAppearance = "light", -- light | dark

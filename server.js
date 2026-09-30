@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const path = require("path");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const app = express();
 const server = http.createServer(app);
@@ -35,10 +36,10 @@ app.post("/update", (req, res) => {
 	try {
 		const data = JSON.parse(req.body);
 		// 🔍 Debug-Log 
-		const fs = require("fs");
-		const path = require("path");
 		const payloadPath = path.join(__dirname, "last_payload.json");
-		fs.writeFileSync(payloadPath, req.body);
+		fs.writeFile(payloadPath, req.body, (err) => {
+			if (err) console.error("❌ Error writing last_payload.json:", err);
+		});
 		lastContent = data;
 
 		wss.clients.forEach((client) => {
