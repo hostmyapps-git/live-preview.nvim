@@ -61,12 +61,37 @@ function setupThemeDropdown(defaultAppearance = "light") {
 	themeListenerRegistered=true;
 }
 
+function setupFullscreenToggle(){
+	const btn=document.getElementById("fullscreenToggle");
+	btn.addEventListener('click',e => {
+		if (btn.classList.contains('isFullscreen')){
+			document.exitFullscreen();
+		}
+		else{
+			const elem = document.documentElement;
+			if (elem.requestFullscreen){
+				elem.requestFullscreen();
+			}
+		}
+	});
+	document.addEventListener("fullscreenchange", e => {
+		console.log('fullscreenchange');
+		if (document.fullscreenElement){
+			btn.classList.add('isFullscreen');
+		}
+		else{
+			btn.classList.remove('isFullscreen');
+		}
+	});
+}
+
 export async function handleMessage(data) {
 	try {
 		if (data.config){
 			applyLuaConfig(data.config);
 			bootstrapLibraries(data.config);
 			setupThemeDropdown(data.config.general?.defaultAppearance || "light");
+			setupFullscreenToggle();
 			await loadIconPacks(data.config);
 		}
 		const cfg = window._livePreviewConfig || data.config || {};
