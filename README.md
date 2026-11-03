@@ -173,15 +173,15 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 | Library                                                               | Version |
 |-----------------------------------------------------------------------|---------|
 | [d2.js](https://github.com/terrastruct/d2/tree/master/d2js)           | 0.1.33  |
-| [chart.js](https://github.com/chartjs/Chart.js)                       | 4.5.1   |
+| [chart.js](https://github.com/chartjs/Chart.js)                       | 4.6.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.11.1 |
-| [katex](https://github.com/KaTeX/KaTeX)                               | 0.18.9  |
-| [markdown-it](https://github.com/markdown-it/markdown-it)             | 15.0.2  |
-| [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 12.0.0 |
+| [katex](https://github.com/KaTeX/KaTeX)                               | 0.19.1  |
+| [markdown-it](https://github.com/markdown-it/markdown-it)             | 15.0.3  |
+| [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 12.2.0 |
 | [plantuml-encoder](https://github.com/markushedvall/plantuml-encoder) | 1.4.0   |
 | [textile.js](https://github.com/borgar/textile-js)                    | 2.1.1   |
 | [tikz.js](https://https://github.com/hostmyapps-git/tikz.js)          | 0.1.0   |
-| [viz-js](https://github.com/markushedvall/plantuml-encoder)           | 3.30.0  |
+| [viz-js](https://github.com/mdaines/viz-js)                           | 3.31.0  |
 
 ### Iconpacks
 
@@ -191,7 +191,7 @@ The following iconpacks are included in `static/iconpacks`. Setup your own iconp
 | ---|---|
 | [affinity](https://github.com/ecceman/affinity)| 2025-10-14 |
 | [@iconify-json/fa6-solid](https://icon-sets.iconify.design/fa6-solid/) | 1.2.4 |
-| [@iconify-json/logos](https://icon-sets.iconify.design/logos/) | 1.2.14 |
-| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.136 |
-| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.40 |
+| [@iconify-json/logos](https://icon-sets.iconify.design/logos/) | 1.2.18 |
+| [@iconify-json/lucide](https://icon-sets.iconify.design/lucide/) | 1.2.150 |
+| [@iconify-json/tabler](https://icon-sets.iconify.design/tabler/) | 1.2.43 |
 
