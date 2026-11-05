@@ -178,6 +178,7 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 | [katex](https://github.com/KaTeX/KaTeX)                               | 0.19.1  |
 | [markdown-it](https://github.com/markdown-it/markdown-it)             | 15.0.3  |
 | [mermaid.js](https://github.com/mermaid-js/mermaid)                   | 12.2.0 |
+| [pele.js](https://github.com/obsidianmd/pele)                         | 1.13.0 |
 | [plantuml-encoder](https://github.com/markushedvall/plantuml-encoder) | 1.4.0   |
 | [textile.js](https://github.com/borgar/textile-js)                    | 2.1.1   |
 | [tikz.js](https://https://github.com/hostmyapps-git/tikz.js)          | 0.1.0   |
