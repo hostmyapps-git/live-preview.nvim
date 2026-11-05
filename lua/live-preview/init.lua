@@ -166,7 +166,7 @@ local function enrichConfig(cfg)
 		end
 	end
 	-- For iconsets: keep external ones inline, local ones remain as paths
-	for _, section in ipairs({ "mermaid", "svg" }) do
+	for _, section in ipairs({ "mermaid", "pele", "svg" }) do
 		if cfg[section] and cfg[section].iconsets then
 			local filtered = {}
 			for _, pack in ipairs(cfg[section].iconsets) do

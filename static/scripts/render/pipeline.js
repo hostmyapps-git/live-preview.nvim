@@ -1,5 +1,6 @@
 import { renderMermaidBlocks } from "./mermaid.js";
 import { renderGraphviz } from "./graphviz.js";
+import { renderPele } from "./pele.js";
 import { renderChartJs } from "./chart.js";
 import { renderPlantUML } from "./plantuml.js";
 import { renderTikzBlocks } from "./tikz.js";
@@ -13,6 +14,7 @@ export async function postProcessDocument(data, cfg, root) {
 	const format = data?.format || "markdown";
 	const steps = [
 		() => renderMermaidBlocks(format),
+		() => renderPele(format),
 		() => renderGraphviz(format),
 		() => renderChartJs(format),
 		() => renderPlantUML(format),
