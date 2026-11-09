@@ -10,26 +10,32 @@ export function appendInlinedStyles(cfg) {
 			existing = document.createElement("style");
 			existing.dataset.name = style.name;
 			document.head.appendChild(existing);
-			console.log(`🧩 Style added: ${style.name}`);
+			console.log(`Style added: ${style.name}`);
 		}
 
 		// update only if style changed
 		if (existing.textContent !== style.content) {
 			existing.textContent = style.content;
-			console.log(`🔁 Style updated: ${style.name}`);
+			console.log(`Style updated: ${style.name}`);
 		}
 	});
 }
 
 export function appendInlinedScripts(cfg) {
-	if (Array.isArray(cfg._inlined_scripts)) {
-		cfg._inlined_scripts.forEach(script => {
-			const tag = document.createElement("script");
-			tag.textContent = script.content;
-			tag.dataset.name = script.name;
-			document.body.appendChild(tag);
-		});
-	}
+	if (!Array.isArray(cfg._inlined_scripts)) return;
+	cfg._inlined_scripts.forEach(script => {
+		let existing=document.body.querySelector(`script[data-name="${script.name}"]`);
+		if (!existing){
+			existing = document.createElement("script");
+			existing.dataset.name = script.name;
+			document.body.appendChild(existing);
+			console.log(`Script added: ${script.name}`);
+		}
+		if (existing.textContent !== script.content){
+			existing.textContent = script.content;
+			console.log(`Script updated: ${script.name}`);
+		}
+	});
 }
 
 export function smoothScrollTo(data) {
