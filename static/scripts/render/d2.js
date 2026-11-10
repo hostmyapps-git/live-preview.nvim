@@ -35,6 +35,8 @@ export async function renderD2(format) {
 				const svgStr= await d2.render(result.diagram, result.renderOptions);
 				const parser=new DOMParser();
 				const svg=parser.parseFromString(svgStr,"image/svg+xml").documentElement;
+				svg.setAttribute('width',svg.viewBox.baseVal.width);
+				svg.setAttribute('height',svg.viewBox.baseVal.height);
 				block.parentElement.replaceWith(svg);
 			}
 		} catch (err){
