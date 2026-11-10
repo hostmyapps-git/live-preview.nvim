@@ -172,7 +172,7 @@ The following libraries are included in `static/libs`. Setup your own libraries 
 
 | Library                                                               | Version |
 |-----------------------------------------------------------------------|---------|
-| [d2.js](https://github.com/terrastruct/d2/tree/master/d2js)           | 0.1.33  |
+| [d2.js](https://github.com/terrastruct/d2/tree/master/d2js)           | 0.1.34  |
 | [chart.js](https://github.com/chartjs/Chart.js)                       | 4.6.1   |
 | [highlight.js](https://github.com/highlightjs/highlight.js)           | 11.12.0 |
 | [katex](https://github.com/KaTeX/KaTeX)                               | 0.19.1  |
