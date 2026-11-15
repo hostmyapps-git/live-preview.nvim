@@ -1,0 +1,7 @@
+node_modules/
+.*
+!.gitignore
+TODO.textile
+server_error.log
+last_payload.json
+static/icons/
