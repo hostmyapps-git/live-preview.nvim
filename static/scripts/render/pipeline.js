@@ -14,8 +14,10 @@ import { appendInlinedStyles, appendInlinedScripts, smoothScrollTo, attachSvgDow
 export async function postProcessDocument(data, cfg, root) {
 	const format = data?.format || "markdown";
 	const steps = [
+		() => appendInlinedStyles(cfg),
+		() => appendInlinedScripts(cfg),
 		() => renderMermaidBlocks(format),
-		() => renderArch(format, root),
+		() => renderArch(format, root, cfg),
 		() => renderPele(format),
 		() => renderGraphviz(format),
 		() => renderChartJs(format),
@@ -26,8 +28,6 @@ export async function postProcessDocument(data, cfg, root) {
 		() => renderMath(root),
 		() => highlightAll(),
 		() => attachSvgDownloadToolbars(),
-		() => appendInlinedStyles(cfg),
-		() => appendInlinedScripts(cfg),
 		() => smoothScrollTo(data),
 	];
 	for (const step of steps) {
