@@ -1,3 +1,4 @@
+import { renderArch } from "./arch.js";
 import { renderMermaidBlocks } from "./mermaid.js";
 import { renderGraphviz } from "./graphviz.js";
 import { renderPele } from "./pele.js";
@@ -14,6 +15,7 @@ export async function postProcessDocument(data, cfg, root) {
 	const format = data?.format || "markdown";
 	const steps = [
 		() => renderMermaidBlocks(format),
+		() => renderArch(format, root),
 		() => renderPele(format),
 		() => renderGraphviz(format),
 		() => renderChartJs(format),
