@@ -2,18 +2,13 @@ export function appendInlinedStyles(cfg) {
 	if (!Array.isArray(cfg._inlined_styles)) return;
 
 	cfg._inlined_styles.forEach(style => {
-		// check if there is already a style with the same name loaded
 		let existing = document.head.querySelector(`style[data-name="${style.name}"]`);
-
 		if (!existing) {
-			// create style
 			existing = document.createElement("style");
 			existing.dataset.name = style.name;
 			document.head.appendChild(existing);
 			console.log(`Style added: ${style.name}`);
 		}
-
-		// update only if style changed
 		if (existing.textContent !== style.content) {
 			existing.textContent = style.content;
 			console.log(`Style updated: ${style.name}`);
